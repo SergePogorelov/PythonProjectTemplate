@@ -65,6 +65,19 @@ def test_corpus_counter_add_docs():
     assert cc.get_token_count("word") == 2
     assert cc.get_token_count("Word") == 1
 
+def test_corpus_counter_add_stop_words():
+    cc = word_count.CorpusCounter()
+    cc.add_doc("the as of word")
+    assert cc.doc_counter == 1
+    assert cc.get_token_count("the") == 0
+    assert cc.get_token_count("as") == 0
+    assert cc.get_token_count("of") == 0
+    assert cc.get_token_count("word") == 1
+    cc.add_tokenized_doc(["Word", "word", "as", "of"])
+    assert cc.get_token_count("as") == 0
+    assert cc.get_token_count("of") == 0
+    assert cc.get_token_count("word") == 2
+    assert cc.get_token_count("Word") == 1
 
 def test_corpus_counter_add_empty_doc():
     cc = word_count.CorpusCounter()
