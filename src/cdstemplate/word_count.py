@@ -38,6 +38,7 @@ class CorpusCounter:
         :param tokenization_pattern: An optional tokenization pattern so that you are consistently tokenizing all documents the same. Defaults to splitting on whitespace
         :param case_insensitive: Set to True to downcase tokens before counting, defaults to False
         """
+        self.stop_words = ["", "and", "as", "the", "of"]
         self.token_counter = Counter()
         self.doc_counter = 0
         self.tokenization_pattern = tokenization_pattern
@@ -55,7 +56,7 @@ class CorpusCounter:
         :type token_list: list or iterable of strings
         """
         before_vocab_size = self.get_vocab_size()
-        non_empty_tokens = [w for w in token_list if w != ""]
+        non_empty_tokens = [w for w in token_list if w not in self.stop_words]
         if self.case_insensitive:
             logger.info("Adding %s token(s) case insensitively", len(token_list))
             self.token_counter.update([w.lower() for w in non_empty_tokens])
@@ -86,7 +87,7 @@ class CorpusCounter:
         :param token: The token to retrieve counts of
         :type token: str
         """
-        return self.token_counter[token]
+        return self.token_counter.get(token, 0)
 
     def get_vocab_size(self):
         """Returns vocabulary size (number of unique tokens)
