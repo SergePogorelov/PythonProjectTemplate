@@ -87,7 +87,7 @@ class CorpusCounter:
         :param token: The token to retrieve counts of
         :type token: str
         """
-        return self.token_counter[token]
+        return self.token_counter.get(token, 0)
 
     def get_vocab_size(self):
         """Returns vocabulary size (number of unique tokens)
